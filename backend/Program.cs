@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Grafana.OpenTelemetry;  
+using OpenTelemetry.Logs; 
 
 namespace SampleApi
 {
@@ -12,6 +15,12 @@ namespace SampleApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+	        .ConfigureServices(services => 
+                {
+                    services.AddOpenTelemetry().UseGrafana();
+                })
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+
     }
 }

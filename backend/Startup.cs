@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Grafana.OpenTelemetry;  
+using OpenTelemetry.Metrics;  
+using OpenTelemetry.Trace; 
 
 namespace SampleApi
 {
@@ -16,9 +19,12 @@ namespace SampleApi
                 .SetIsOriginAllowed(origin => origin.StartsWith("http://") || origin.StartsWith("https://"))
                 .AllowAnyHeader()
                 .AllowAnyMethod()));
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        
+            services.AddOpenTelemetry()  
+                .WithTracing(configure => configure.UseGrafana())  
+                .WithMetrics(configure => configure.UseGrafana());  
+        }  
+	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 

@@ -1,3 +1,25 @@
+import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+  import { TracingInstrumentation } from '@grafana/faro-web-tracing';
+
+  initializeFaro({
+    url: 'https://faro-collector-prod-ap-south-1.grafana.net/collect/b6ae2736686f47a3e4b6f76be76a9533',
+    app: {
+      name: 'Dotnet Application',
+      version: '1.0.0',
+      environment: 'production'
+    },
+    sessionTracking: {
+      samplingRate: 1,
+      persistent: true
+    },
+    instrumentations: [
+      // Mandatory, omits default instrumentations otherwise.
+      ...getWebInstrumentations(),
+
+      // Tracing package to get end-to-end visibility for HTTP requests.
+      new TracingInstrumentation(),
+    ],
+});
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";

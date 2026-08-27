@@ -15,9 +15,15 @@ services:
     build: ./backend
     ports:
       - "5000:5000"
+    environment:  
+      - OTEL_SERVICE_NAME=dotnet-backend  
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://host.docker.internal:4318 
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf  
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=test  
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  
     networks:
       - app-network
-
 networks:
   app-network:
     driver: bridge
